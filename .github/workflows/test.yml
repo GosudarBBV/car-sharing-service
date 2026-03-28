@@ -6,9 +6,3 @@ services:
       MYSQL_DATABASE: test_db
     ports:
       - 3306:3306
-      - name: Wait for MySQL
-      - run: |
-      - until mysqladmin ping -h mysql --silent; do
-      - echo "Waiting for MySQL..."
-      - sleep 5
-      - done
