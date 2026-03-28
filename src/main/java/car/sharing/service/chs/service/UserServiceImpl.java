@@ -11,10 +11,10 @@ import car.sharing.service.chs.model.User;
 import car.sharing.service.chs.repository.RoleRepository;
 import car.sharing.service.chs.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Set;
 
 @Service
 @Transactional
