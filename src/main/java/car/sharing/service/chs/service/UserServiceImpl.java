@@ -2,10 +2,11 @@ package car.sharing.service.chs.service;
 
 import car.sharing.service.chs.dto.UserRegisterRequestDto;
 import car.sharing.service.chs.dto.UserResponseDto;
-
+import car.sharing.service.chs.exception.PasswordMismatchException;
+import car.sharing.service.chs.exception.RoleNotFoundException;
+import car.sharing.service.chs.exception.UserAlreadyExistsException;
 import car.sharing.service.chs.mapper.UserMapper;
 import car.sharing.service.chs.model.Role;
-import car.sharing.service.chs.model.RoleName;
 import car.sharing.service.chs.model.User;
 import car.sharing.service.chs.repository.RoleRepository;
 import car.sharing.service.chs.repository.UserRepository;
@@ -29,11 +30,11 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegisterRequestDto requestDto) {
 
         if (userRepository.existsByEmail(requestDto.email())) {
-            throw new RuntimeException("User already exists");
+            throw new UserAlreadyExistsException("User already exists");
         }
 
         if (!requestDto.password().equals(requestDto.confirmPassword())) {
-            throw new RuntimeException("Passwords do not match");
+            throw new PasswordMismatchException("Passwords do not match");
         }
 
         System.out.println("ROLE FROM DTO: " + requestDto.role());
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleRepository.findByName(requestDto.role())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new RoleNotFoundException("Role not found"));
 
         user.setRoles(Set.of(userRole));
 
