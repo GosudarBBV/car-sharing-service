@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-cars-table
+      author: you
+      changes:
+        - createTable:
+            tableName: cars
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: model
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false

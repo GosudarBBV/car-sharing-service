@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-cars
+      author: you
+      changes:
+        - insert:
+            tableName: cars
+            columns:
+              - column:
+                  name: model
+                  value: Tesla
+        - insert:
+            tableName: cars
+            columns:
+              - column:
+                  name: model
+                  value: BMW
