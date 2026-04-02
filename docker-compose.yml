@@ -1,0 +1,40 @@
+services:
+  postgresdb:
+    platform: linux/arm64
+    image: postgres:18-bookworm
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      TZ: UTC
+    ports:
+      - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DATABASE}"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  app:
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+    restart: on-failure
+    image: car-sharing-app
+    build: .
+    env_file: ./.env
+    ports:
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+      - "${DEBUG_PORT}:${DEBUG_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url": "jdbc:postgresql://postgresdb:5432/${POSTGRES_DATABASE}?currentSchema=public&sslmode=disable",
+        "spring.datasource.username": "${POSTGRES_USER}",
+        "spring.datasource.password": "${POSTGRES_PASSWORD}",
+        "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.PostgreSQLDialect",
+        "spring.jpa.properties.hibernate.jdbc.time_zone": "UTC"
+      }'
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"

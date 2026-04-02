@@ -1,18 +1,20 @@
 databaseChangeLog:
   - changeSet:
-      id: create-cars-table
+      id: create-roles-table
       author: you
       changes:
         - createTable:
-            tableName: cars
+            tableName: roles
             columns:
               - column:
                   name: id
-                  type: BIGINT AUTO_INCREMENT
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
+
               - column:
-                  name: model
+                  name: name
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
+                    unique: true

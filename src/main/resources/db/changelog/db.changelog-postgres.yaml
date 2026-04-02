@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/postgres-changes-for-docker/01-create-users-table.yaml
+  - include:
+      file: db/changelog/postgres-changes-for-docker/02-create-roles-table.yaml
+  - include:
+      file: db/changelog/postgres-changes-for-docker/03-create-users-roles-table.yaml
+  - include:
+      file: db/changelog/postgres-changes-for-docker/04-insert-roles.yaml
+  - include:
+      file: db/changelog/postgres-changes-for-docker/001-create-cars-table.yaml
+  - include:
+      file: db/changelog/postgres-changes-for-docker/002-insert-cars.yaml

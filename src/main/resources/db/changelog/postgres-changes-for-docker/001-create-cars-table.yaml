@@ -8,9 +8,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT AUTO_INCREMENT
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
+
               - column:
                   name: model
                   type: VARCHAR(50)
