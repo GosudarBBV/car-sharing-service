@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "Endpoints for user registration and login")
 public class AuthController {
-
     private final UserService userService;
     private final AuthenticationService authService;
 
-    @PostMapping("/registration")
+    @PostMapping("/register")
     @Operation(summary = "Register new user")
     public UserResponseDto registerUser(
             @RequestBody @Valid UserRegisterRequestDto requestDto

@@ -44,7 +44,6 @@ public class JwtUtil {
                     .parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            // log.warn("Invalid JWT: {}", e.getMessage());
             return false;
         }
     }

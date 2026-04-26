@@ -39,8 +39,12 @@ public class SecurityConfig {
                                         "/auth/**",
                                         "/error",
                                         "/swagger-ui/**",
-                                        "/v3/api-docs/**"
+                                        "/v3/api-docs/**",
+                                        "/payments/webhook",
+                                        "/payments/success",
+                                        "/payments/cancel"
                                 ).permitAll()
+                                .anyRequest().authenticated()
                 ).sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter,

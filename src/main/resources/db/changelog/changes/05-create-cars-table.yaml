@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-cars-table
+      author: you
+      changes:
+
+        - createTable:
+            tableName: cars
+            columns:
+
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: brand
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: model
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: inventory
+                  type: INT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: daily_fee
+                  type: DECIMAL(10,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: idx_cars_brand_type
+            tableName: cars
+            columns:
+              - column:
+                  name: brand
+              - column:
+                  name: type
+        - sql:
+            sql: ALTER TABLE cars ADD CONSTRAINT chk_cars_inventory_positive CHECK (inventory >= 0);
+
+        - sql:
+            sql: ALTER TABLE cars ADD CONSTRAINT chk_cars_daily_fee_positive CHECK (daily_fee >= 0);
+
+        - sql:
+            sql: ALTER TABLE cars ADD CONSTRAINT chk_cars_type_valid CHECK (type IN ('SEDAN','SUV','HATCHBACK','UNIVERSAL'));

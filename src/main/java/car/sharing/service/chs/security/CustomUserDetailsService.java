@@ -1,7 +1,10 @@
 package car.sharing.service.chs.security;
 
+import car.sharing.service.chs.exception.UserNotDeletedException;
+import car.sharing.service.chs.model.User;
 import car.sharing.service.chs.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,9 +16,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return userRepository.findWithRolesByEmail(email).orElseThrow(()
-                -> new UsernameNotFoundException("Can't find user by email: " + email));
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findWithRolesByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (user.isDeleted()) {
+            throw new UserNotDeletedException("User account is deleted");
+        }
+
+        var authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
+                .toList();
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 }

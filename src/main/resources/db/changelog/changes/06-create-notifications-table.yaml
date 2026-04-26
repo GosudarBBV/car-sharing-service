@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-notifications-table
+      author: you
+      changes:
+        - createTable:
+            tableName: notifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: message
+                  type: VARCHAR(1000)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: sent
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_notifications_user
+            baseTableName: notifications
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createIndex:
+            indexName: idx_notifications_user_id
+            tableName: notifications
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            indexName: idx_notifications_sent
+            tableName: notifications
+            columns:
+              - column:
+                  name: sent
+        - createIndex:
+            indexName: idx_notifications_created_at
+            tableName: notifications
+            columns:
+              - column:
+                  name: created_at

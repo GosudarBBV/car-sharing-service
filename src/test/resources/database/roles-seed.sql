@@ -1,0 +1,4 @@
+DELETE FROM roles;
+
+INSERT INTO roles (name) VALUES ('MANAGER');
+INSERT INTO roles (name) VALUES ('CUSTOMER');
