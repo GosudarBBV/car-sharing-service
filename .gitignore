@@ -21,6 +21,7 @@ target/
 
 # Environment variables
 .env
+src/test/resources/test.env
 
 # Test reports
 target/surefire-reports/
