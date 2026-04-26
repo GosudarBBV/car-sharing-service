@@ -17,4 +17,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+        run: mvn --batch-mode --update-snapshots clean test
