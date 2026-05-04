@@ -1,6 +1,6 @@
 # Builder stage
 FROM eclipse-temurin:21-jdk-alpine AS builder
-WORKDIR application
+WORKDIR /application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 
