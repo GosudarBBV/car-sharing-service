@@ -7,11 +7,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.UpdateCarRequestDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.car.UpdateCarRequestDto;
 import car.sharing.service.chs.exception.CarInUseException;
-import car.sharing.service.chs.exception.CarNotFoundException;
 import car.sharing.service.chs.mapper.CarMapper;
 import car.sharing.service.chs.model.Car;
 import car.sharing.service.chs.model.CarType;
@@ -21,6 +20,8 @@ import car.sharing.service.chs.util.TestEntityFactory;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -127,7 +128,7 @@ class CarServiceImplTest {
     void getById_ThrowsException() {
         when(carRepository.findByIdAndNotDeleted(NON_EXISTENT_CAR_ID)).thenReturn(Optional.empty());
 
-        assertThrows(CarNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> carService.getById(NON_EXISTENT_CAR_ID));
     }
 
@@ -141,7 +142,8 @@ class CarServiceImplTest {
                 UPDATED_INVENTORY, UPDATED_FEE
         );
 
-        when(carRepository.findByIdForUpdateAndNotDeleted(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
+        when(carRepository.findByIdAndNotDeleted(EXISTING_CAR_ID))
+                .thenReturn(Optional.of(car));
         doNothing().when(carMapper).updateCarFromDto(dto, car);
         when(carRepository.save(car)).thenReturn(car);
         when(carMapper.toDto(car)).thenReturn(expectedResponse);
@@ -150,7 +152,7 @@ class CarServiceImplTest {
 
         assertEquals(expectedResponse, result);
 
-        verify(carRepository).findByIdForUpdateAndNotDeleted(EXISTING_CAR_ID);
+        verify(carRepository).findByIdAndNotDeleted(EXISTING_CAR_ID);
         verify(carMapper).updateCarFromDto(dto, car);
         verify(carRepository).save(car);
         verify(carMapper).toDto(car);
@@ -161,12 +163,15 @@ class CarServiceImplTest {
     void update_ThrowsException() {
         UpdateCarRequestDto dto = TestEntityFactory.updateCarRequest();
 
-        when(carRepository.findByIdForUpdateAndNotDeleted(EXISTING_CAR_ID)).thenReturn(Optional.empty());
+        when(carRepository.findByIdAndNotDeleted(EXISTING_CAR_ID))
+                .thenReturn(Optional.empty());
 
-        assertThrows(CarNotFoundException.class,
-                () -> carService.update(EXISTING_CAR_ID, dto));
+        assertThrows(
+                EntityNotFoundException.class,
+                () -> carService.update(EXISTING_CAR_ID, dto)
+        );
 
-        verify(carRepository).findByIdForUpdateAndNotDeleted(EXISTING_CAR_ID);
+        verify(carRepository).findByIdAndNotDeleted(EXISTING_CAR_ID);
     }
 
     @Test

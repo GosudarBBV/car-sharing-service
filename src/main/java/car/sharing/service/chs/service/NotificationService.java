@@ -1,7 +1,7 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageResponseDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

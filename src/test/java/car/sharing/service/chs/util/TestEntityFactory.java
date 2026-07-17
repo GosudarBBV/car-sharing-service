@@ -1,16 +1,25 @@
 package car.sharing.service.chs.util;
 
-import car.sharing.service.chs.dto.AuthResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.CreateRentalRequestDto;
-import car.sharing.service.chs.dto.PaymentRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.UpdateCarRequestDto;
-import car.sharing.service.chs.dto.UserLoginRequestDto;
-import car.sharing.service.chs.dto.UserRegisterRequestDto;
-import car.sharing.service.chs.dto.UserResponseDto;
-import car.sharing.service.chs.model.*;
-
+import car.sharing.service.chs.dto.user.AuthResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.rental.CreateRentalRequestDto;
+import car.sharing.service.chs.dto.payment.PaymentRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.car.UpdateCarRequestDto;
+import car.sharing.service.chs.dto.user.UserLoginRequestDto;
+import car.sharing.service.chs.dto.user.UserRegisterRequestDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
+import car.sharing.service.chs.model.Car;
+import car.sharing.service.chs.model.CarType;
+import car.sharing.service.chs.model.Notification;
+import car.sharing.service.chs.model.Payment;
+import car.sharing.service.chs.model.PaymentStatus;
+import car.sharing.service.chs.model.PaymentType;
+import car.sharing.service.chs.model.Rental;
+import car.sharing.service.chs.model.Role;
+import car.sharing.service.chs.model.RoleName;
+import car.sharing.service.chs.model.TelegramMessage;
+import car.sharing.service.chs.model.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +28,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 
 public final class TestEntityFactory {
-
     private static final String DEFAULT_PASSWORD = "password123";
     private static final String DEFAULT_FIRST_NAME = "John";
     private static final String DEFAULT_LAST_NAME = "Doe";
@@ -30,7 +38,7 @@ public final class TestEntityFactory {
     private static final long DEFAULT_RENTAL_DAYS = 7L;
 
     private TestEntityFactory() {
-        // Private constructor to prevent instantiation
+
     }
 
     // ========== Authentication Methods ==========

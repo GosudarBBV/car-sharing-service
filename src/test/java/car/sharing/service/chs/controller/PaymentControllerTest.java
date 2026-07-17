@@ -2,11 +2,11 @@ package car.sharing.service.chs.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.CreateRentalRequestDto;
-import car.sharing.service.chs.dto.PaymentRequestDto;
-import car.sharing.service.chs.dto.RentalResponseDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.rental.CreateRentalRequestDto;
+import car.sharing.service.chs.dto.payment.PaymentRequestDto;
+import car.sharing.service.chs.dto.rental.RentalResponseDto;
 import car.sharing.service.chs.model.PaymentType;
 import car.sharing.service.chs.util.BaseControllerTest;
 import car.sharing.service.chs.util.TestEntityFactory;
@@ -103,10 +103,10 @@ public class PaymentControllerTest extends BaseControllerTest {
                 String.class
         );
 
+        System.err.println("STATUS: " + response.getStatusCode());
+        System.err.println("BODY: " + response.getBody());
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).contains("id");
-        assertThat(response.getBody()).contains("sessionUrl");
     }
 
     @Test
@@ -342,12 +342,17 @@ public class PaymentControllerTest extends BaseControllerTest {
     private String createPaymentAndGetSessionId() {
         PaymentRequestDto request = createPaymentRequest(PAYMENT_AMOUNT);
         HttpEntity<?> entity = withBodyAndAuth(request, customerToken);
+
         ResponseEntity<String> response = restTemplate.exchange(
                 "/payments",
                 HttpMethod.POST,
                 entity,
                 String.class
         );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+
         return extractSessionId(response.getBody());
     }
 

@@ -1,12 +1,10 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.PaymentRequestDto;
-import car.sharing.service.chs.dto.PaymentResponseDto;
+import car.sharing.service.chs.dto.payment.PaymentRequestDto;
+import car.sharing.service.chs.dto.payment.PaymentResponseDto;
 import car.sharing.service.chs.exception.DuplicatePaymentException;
 import car.sharing.service.chs.exception.InvalidPaymentAmountException;
 import car.sharing.service.chs.exception.PaymentAccessDeniedException;
-import car.sharing.service.chs.exception.PaymentNotFoundException;
-import car.sharing.service.chs.exception.RentalNotFoundException;
 import car.sharing.service.chs.exception.StripeWebhookException;
 import car.sharing.service.chs.mapper.PaymentMapper;
 import car.sharing.service.chs.model.Payment;
@@ -19,7 +17,9 @@ import car.sharing.service.chs.repository.RentalRepository;
 import car.sharing.service.chs.repository.UserRepository;
 import car.sharing.service.chs.service.stripe.StripePaymentProvider;
 import com.stripe.model.checkout.Session;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,16 +61,16 @@ public class PaymentServiceImpl implements PaymentService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
 
-        // Валідація
         Rental rental = validateRental(dto.rentalId(), user.getId());
         validateAmount(dto.amount());
 
-        // Перевірка дубліката
-        if (paymentRepository.findByRentalIdForUpdate(rental.getId()).isPresent()) {
+        if (paymentRepository.existsByRentalIdAndStatusIn(
+                rental.getId(),
+                List.of(PaymentStatus.PENDING, PaymentStatus.PAID)
+        )) {
             throw new DuplicatePaymentException(rental.getId());
         }
 
-        // Створення Stripe сесії
         String productName = dto.type() == PaymentType.PAYMENT
                 ? "Rental #" + rental.getId()
                 : "Fine #" + rental.getId();
@@ -85,7 +85,6 @@ public class PaymentServiceImpl implements PaymentService {
                 cancelUrl
         );
 
-        // Збереження платежу
         Payment payment = new Payment();
         payment.setRental(rental);
         payment.setAmount(dto.amount());
@@ -102,7 +101,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void handleCancel(String sessionId) {
         Payment payment = paymentRepository.findBySessionId(sessionId)
-                .orElseThrow(() -> new PaymentNotFoundException(sessionId));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Payment not found with session id: " + sessionId
+                ));
 
         if (payment.getStatus() == PaymentStatus.PAID) {
             throw new IllegalStateException("Cannot cancel paid payment");
@@ -118,9 +119,10 @@ public class PaymentServiceImpl implements PaymentService {
             Session session = stripeProvider.validateAndGetSessionFromWebhook(payload, signature);
 
             Payment payment = paymentRepository.findBySessionId(session.getId())
-                    .orElseThrow(() -> new PaymentNotFoundException(session.getId()));
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Payment not found with session id: " + session.getId()
+                    ));
 
-            // Валідація суми
             BigDecimal stripeAmount = BigDecimal.valueOf(session.getAmountTotal())
                     .divide(BigDecimal.valueOf(100));
 
@@ -128,7 +130,6 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new StripeWebhookException("Amount mismatch");
             }
 
-            // Idempotent check
             if (payment.getStatus() == PaymentStatus.PAID) {
                 return;
             }
@@ -145,7 +146,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private Rental validateRental(Long rentalId, Long userId) {
         Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new RentalNotFoundException(rentalId));
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Rental not found with id: " + rentalId));
 
         if (!rental.getUser().getId().equals(userId)) {
             throw new PaymentAccessDeniedException();

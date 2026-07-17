@@ -1,8 +1,8 @@
 package car.sharing.service.chs.controller;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.UpdateCarRequestDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.car.UpdateCarRequestDto;
 import car.sharing.service.chs.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

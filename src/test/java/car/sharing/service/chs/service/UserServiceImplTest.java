@@ -9,10 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import car.sharing.service.chs.dto.UserRegisterRequestDto;
-import car.sharing.service.chs.dto.UserResponseDto;
-import car.sharing.service.chs.dto.UserUpdateDto;
-import car.sharing.service.chs.exception.PasswordMismatchException;
+import car.sharing.service.chs.dto.user.UserRegisterRequestDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
+import car.sharing.service.chs.dto.user.UserUpdateDto;
 import car.sharing.service.chs.exception.RoleNotFoundException;
 import car.sharing.service.chs.exception.UserAlreadyExistsException;
 import car.sharing.service.chs.exception.UserNotDeletedException;

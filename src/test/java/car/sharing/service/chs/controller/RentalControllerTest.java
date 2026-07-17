@@ -2,11 +2,11 @@ package car.sharing.service.chs.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.CreateRentalRequestDto;
-import car.sharing.service.chs.dto.RentalResponseDto;
-import car.sharing.service.chs.dto.UserResponseDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.rental.CreateRentalRequestDto;
+import car.sharing.service.chs.dto.rental.RentalResponseDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
 import car.sharing.service.chs.util.BaseControllerTest;
 import car.sharing.service.chs.util.TestEntityFactory;
 import java.time.LocalDate;
@@ -43,7 +43,6 @@ public class RentalControllerTest extends BaseControllerTest {
 
         testCarId = createTestCar();
 
-        // Отримуємо ID клієнта через REST виклик
         HttpEntity<?> getProfileEntity = withAuth(customerToken);
         ResponseEntity<UserResponseDto> profileResponse = restTemplate.exchange(
                 "/users/me",

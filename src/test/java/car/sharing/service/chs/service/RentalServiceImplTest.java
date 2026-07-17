@@ -9,8 +9,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import car.sharing.service.chs.dto.CreateRentalRequestDto;
-import car.sharing.service.chs.dto.RentalResponseDto;
+import car.sharing.service.chs.dto.rental.CreateRentalRequestDto;
+import car.sharing.service.chs.dto.rental.RentalResponseDto;
 import car.sharing.service.chs.mapper.RentalMapper;
 import car.sharing.service.chs.model.Car;
 import car.sharing.service.chs.model.Rental;

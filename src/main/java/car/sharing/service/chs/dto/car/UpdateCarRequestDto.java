@@ -1,4 +1,4 @@
-package car.sharing.service.chs.dto;
+package car.sharing.service.chs.dto.car;
 
 import car.sharing.service.chs.model.CarType;
 import jakarta.validation.constraints.DecimalMin;

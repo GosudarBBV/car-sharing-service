@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @TestConfiguration
 public class TestSecurityConfig {
-
     @Bean
     @Primary
     public PasswordEncoder testPasswordEncoder() {

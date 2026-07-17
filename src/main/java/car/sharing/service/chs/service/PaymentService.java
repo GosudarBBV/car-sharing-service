@@ -1,7 +1,7 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.PaymentRequestDto;
-import car.sharing.service.chs.dto.PaymentResponseDto;
+import car.sharing.service.chs.dto.payment.PaymentRequestDto;
+import car.sharing.service.chs.dto.payment.PaymentResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,4 +1,4 @@
-package car.sharing.service.chs.dto;
+package car.sharing.service.chs.dto.user;
 
 public record UserResponseDto(
         Long id,

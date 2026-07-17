@@ -1,9 +1,7 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageResponseDto;
-import car.sharing.service.chs.exception.PaymentNotFoundException;
-import car.sharing.service.chs.exception.RentalNotFoundException;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageResponseDto;
 import car.sharing.service.chs.exception.TelegramSendFailedException;
 import car.sharing.service.chs.mapper.TelegramMessageMapper;
 import car.sharing.service.chs.model.Payment;
@@ -12,6 +10,7 @@ import car.sharing.service.chs.model.TelegramMessage;
 import car.sharing.service.chs.repository.PaymentRepository;
 import car.sharing.service.chs.repository.RentalRepository;
 import car.sharing.service.chs.repository.TelegramMessageRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +29,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Service
 @RequiredArgsConstructor
 public class TelegramNotificationServiceImpl implements NotificationService {
-
     private final TelegramBot bot;
     private final TelegramMessageRepository messageRepository;
     private final TelegramMessageMapper mapper;
@@ -82,7 +80,8 @@ public class TelegramNotificationServiceImpl implements NotificationService {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(() -> {
                     log.error("Rental not found with id: {}", rentalId);
-                    return new RentalNotFoundException(rentalId);
+                    return new EntityNotFoundException("Rental not found with id: "
+                            + rentalId);
                 });
 
         String msg = String.format("🚗 New rental #%d created", rental.getId());
@@ -119,7 +118,9 @@ public class TelegramNotificationServiceImpl implements NotificationService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> {
                     log.error("Payment not found with id: {}", paymentId);
-                    return new PaymentNotFoundException(paymentId);
+                    return new EntityNotFoundException(
+                            "Payment not found with session id: " + paymentId
+                    );
                 });
 
         String msg = String.format("💰 Payment success $%.2f", payment.getAmount());

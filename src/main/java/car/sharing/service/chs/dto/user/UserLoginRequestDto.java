@@ -1,4 +1,4 @@
-package car.sharing.service.chs.dto;
+package car.sharing.service.chs.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

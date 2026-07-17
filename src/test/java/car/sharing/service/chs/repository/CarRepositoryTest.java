@@ -21,22 +21,34 @@ class CarRepositoryTest extends BaseRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    @DisplayName("Find car by id for update - returns car when exists")
-    void findByIdForUpdate_existingCar_returnsCar() {
+    @DisplayName("Find not deleted car by id - returns car when exists")
+    void findByIdAndNotDeleted_existingCar_returnsCar() {
         Car car = TestEntityFactory.createCar();
         entityManager.persistAndFlush(car);
 
-        Car result = carRepository.findByIdForUpdate(car.getId())
-                .orElseThrow();
+        Optional<Car> result = carRepository.findByIdAndNotDeleted(car.getId());
 
-        assertThat(result.getId()).isEqualTo(car.getId());
-        assertThat(result.getBrand()).isEqualTo("Tesla");
+        assertThat(result).isPresent();
+        assertThat(result.get().getId()).isEqualTo(car.getId());
+        assertThat(result.get().getBrand()).isEqualTo("Tesla");
     }
 
     @Test
-    @DisplayName("Find car by id for update - returns empty when car does not exist")
-    void findByIdForUpdate_nonExistingCar_returnsEmpty() {
-        Optional<Car> result = carRepository.findByIdForUpdate(NON_EXISTENT_CAR_ID);
+    @DisplayName("Find not deleted car by id - returns empty when car does not exist")
+    void findByIdAndNotDeleted_nonExistingCar_returnsEmpty() {
+        Optional<Car> result = carRepository.findByIdAndNotDeleted(NON_EXISTENT_CAR_ID);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Find not deleted car by id - returns empty when car is deleted")
+    void findByIdAndNotDeleted_deletedCar_returnsEmpty() {
+        Car car = TestEntityFactory.createCar();
+        car.setDeleted(true);
+        entityManager.persistAndFlush(car);
+
+        Optional<Car> result = carRepository.findByIdAndNotDeleted(car.getId());
 
         assertThat(result).isEmpty();
     }

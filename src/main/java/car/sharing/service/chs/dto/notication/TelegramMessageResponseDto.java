@@ -1,4 +1,4 @@
-package car.sharing.service.chs.dto;
+package car.sharing.service.chs.dto.notication;
 
 import java.time.LocalDateTime;
 

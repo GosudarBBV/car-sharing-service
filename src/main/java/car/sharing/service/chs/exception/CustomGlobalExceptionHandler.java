@@ -16,17 +16,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class CustomGlobalExceptionHandler {
-    @ExceptionHandler({
-            EntityNotFoundException.class,
-            CarNotFoundException.class,
-            RentalNotFoundException.class,
-            PaymentNotFoundException.class,
-            RoleNotFoundException.class
-    })
-    public ResponseEntity<ApiError> handleNotFound(RuntimeException ex,
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(EntityNotFoundException ex,
                                                    HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage(),
-                request.getRequestURI());
+        ApiError error = new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 

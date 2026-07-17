@@ -1,8 +1,8 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.UserRegisterRequestDto;
-import car.sharing.service.chs.dto.UserResponseDto;
-import car.sharing.service.chs.dto.UserUpdateDto;
+import car.sharing.service.chs.dto.user.UserRegisterRequestDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
+import car.sharing.service.chs.dto.user.UserUpdateDto;
 import car.sharing.service.chs.model.RoleName;
 
 public interface UserService {

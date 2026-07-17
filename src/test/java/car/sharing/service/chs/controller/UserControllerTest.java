@@ -2,11 +2,11 @@ package car.sharing.service.chs.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import car.sharing.service.chs.dto.AuthResponseDto;
-import car.sharing.service.chs.dto.UserLoginRequestDto;
-import car.sharing.service.chs.dto.UserRegisterRequestDto;
-import car.sharing.service.chs.dto.UserResponseDto;
-import car.sharing.service.chs.dto.UserUpdateDto;
+import car.sharing.service.chs.dto.user.AuthResponseDto;
+import car.sharing.service.chs.dto.user.UserLoginRequestDto;
+import car.sharing.service.chs.dto.user.UserRegisterRequestDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
+import car.sharing.service.chs.dto.user.UserUpdateDto;
 import car.sharing.service.chs.model.RoleName;
 import car.sharing.service.chs.util.BaseControllerTest;
 import car.sharing.service.chs.util.TestEntityFactory;

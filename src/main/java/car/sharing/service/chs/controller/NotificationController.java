@@ -1,7 +1,7 @@
 package car.sharing.service.chs.controller;
 
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageResponseDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageResponseDto;
 import car.sharing.service.chs.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

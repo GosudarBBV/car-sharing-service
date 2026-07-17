@@ -9,10 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageResponseDto;
-import car.sharing.service.chs.exception.PaymentNotFoundException;
-import car.sharing.service.chs.exception.RentalNotFoundException;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageResponseDto;
 import car.sharing.service.chs.exception.TelegramSendFailedException;
 import car.sharing.service.chs.mapper.TelegramMessageMapper;
 import car.sharing.service.chs.model.Car;
@@ -32,6 +30,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -196,7 +196,7 @@ class TelegramNotificationServiceImplTest {
     void notifyNewRental_RentalNotFound_ThrowsException() throws TelegramApiException {
         when(rentalRepository.findById(TEST_RENTAL_ID)).thenReturn(Optional.empty());
 
-        assertThrows(RentalNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> notificationService.notifyNewRental(TEST_RENTAL_ID));
 
         verify(rentalRepository).findById(TEST_RENTAL_ID);
@@ -266,7 +266,7 @@ class TelegramNotificationServiceImplTest {
     void notifyPaymentSuccess_PaymentNotFound_ThrowsException() throws TelegramApiException {
         when(paymentRepository.findById(TEST_PAYMENT_ID)).thenReturn(Optional.empty());
 
-        assertThrows(PaymentNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> notificationService.notifyPaymentSuccess(TEST_PAYMENT_ID));
 
         verify(paymentRepository).findById(TEST_PAYMENT_ID);

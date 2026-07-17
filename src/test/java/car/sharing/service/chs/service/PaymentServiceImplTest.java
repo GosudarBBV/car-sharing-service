@@ -8,8 +8,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import car.sharing.service.chs.dto.PaymentRequestDto;
-import car.sharing.service.chs.dto.PaymentResponseDto;
+import car.sharing.service.chs.dto.payment.PaymentRequestDto;
+import car.sharing.service.chs.dto.payment.PaymentResponseDto;
 import car.sharing.service.chs.exception.*;
 import car.sharing.service.chs.mapper.PaymentMapper;
 import car.sharing.service.chs.model.Payment;
@@ -24,7 +24,10 @@ import car.sharing.service.chs.service.stripe.StripePaymentProvider;
 import car.sharing.service.chs.util.TestEntityFactory;
 import com.stripe.model.checkout.Session;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -119,7 +122,7 @@ class PaymentServiceImplTest {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(rentalRepository.findById(rental.getId())).thenReturn(Optional.empty());
 
-        assertThrows(RentalNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> paymentService.createPaymentSession(requestDto, USER_EMAIL));
     }
 
@@ -142,18 +145,25 @@ class PaymentServiceImplTest {
     void createPaymentSession_DuplicatePayment_ThrowsException() {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(rentalRepository.findById(rental.getId())).thenReturn(Optional.of(rental));
-        when(paymentRepository.findByRentalIdForUpdate(rental.getId())).thenReturn(Optional.of(payment));
+        when(paymentRepository.existsByRentalIdAndStatusIn(
+                rental.getId(),
+                List.of(PaymentStatus.PENDING, PaymentStatus.PAID)
+        )).thenReturn(true);
 
-        assertThrows(DuplicatePaymentException.class,
-                () -> paymentService.createPaymentSession(requestDto, USER_EMAIL));
+        assertThrows(
+                DuplicatePaymentException.class,
+                () -> paymentService.createPaymentSession(requestDto, USER_EMAIL)
+        );
     }
-
     @Test
     @DisplayName("Create payment session - creates payment successfully")
     void createPaymentSession_Success() {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(rentalRepository.findById(rental.getId())).thenReturn(Optional.of(rental));
-        when(paymentRepository.findByRentalIdForUpdate(rental.getId())).thenReturn(Optional.empty());
+        when(paymentRepository.existsByRentalIdAndStatusIn(
+                rental.getId(),
+                List.of(PaymentStatus.PENDING, PaymentStatus.PAID)
+        )).thenReturn(false);
         when(stripeProvider.createSession(
                 eq(rental.getId()), eq(user.getId()), eq(VALID_AMOUNT),
                 eq(PaymentType.PAYMENT.name()), eq("Rental #" + rental.getId()),
@@ -250,7 +260,7 @@ class PaymentServiceImplTest {
     void handleCancel_PaymentNotFound_ThrowsException() {
         when(paymentRepository.findBySessionId(SESSION_ID)).thenReturn(Optional.empty());
 
-        assertThrows(PaymentNotFoundException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> paymentService.handleCancel(SESSION_ID));
     }
 

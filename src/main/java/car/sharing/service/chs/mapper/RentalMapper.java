@@ -1,7 +1,7 @@
 package car.sharing.service.chs.mapper;
 
 import car.sharing.service.chs.config.MapperConfig;
-import car.sharing.service.chs.dto.RentalResponseDto;
+import car.sharing.service.chs.dto.rental.RentalResponseDto;
 import car.sharing.service.chs.model.Rental;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

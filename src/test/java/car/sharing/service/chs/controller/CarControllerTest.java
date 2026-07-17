@@ -3,9 +3,9 @@ package car.sharing.service.chs.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.UpdateCarRequestDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.car.UpdateCarRequestDto;
 import car.sharing.service.chs.service.CarService;
 import car.sharing.service.chs.util.BaseControllerTest;
 import car.sharing.service.chs.util.TestEntityFactory;

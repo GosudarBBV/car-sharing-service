@@ -1,14 +1,14 @@
 package car.sharing.service.chs.service;
 
-import car.sharing.service.chs.dto.CarResponseDto;
-import car.sharing.service.chs.dto.CreateCarRequestDto;
-import car.sharing.service.chs.dto.UpdateCarRequestDto;
+import car.sharing.service.chs.dto.car.CarResponseDto;
+import car.sharing.service.chs.dto.car.CreateCarRequestDto;
+import car.sharing.service.chs.dto.car.UpdateCarRequestDto;
 import car.sharing.service.chs.exception.CarInUseException;
-import car.sharing.service.chs.exception.CarNotFoundException;
 import car.sharing.service.chs.mapper.CarMapper;
 import car.sharing.service.chs.model.Car;
 import car.sharing.service.chs.repository.CarRepository;
 import car.sharing.service.chs.repository.RentalRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,15 +40,15 @@ public class CarServiceImpl implements CarService {
     @Transactional(readOnly = true)
     public CarResponseDto getById(Long id) {
         Car car = carRepository.findByIdAndNotDeleted(id)
-                .orElseThrow(() -> new CarNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException("Car not found with id: " + id));
         return carMapper.toDto(car);
     }
 
     @Override
     @Transactional
     public CarResponseDto update(Long id, UpdateCarRequestDto dto) {
-        Car car = carRepository.findByIdForUpdateAndNotDeleted(id)
-                .orElseThrow(() -> new CarNotFoundException(id));
+        Car car = carRepository.findByIdAndNotDeleted(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car not found with id: " + id));
 
         carMapper.updateCarFromDto(dto, car);
 

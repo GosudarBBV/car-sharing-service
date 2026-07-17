@@ -1,4 +1,4 @@
-package car.sharing.service.chs.dto;
+package car.sharing.service.chs.dto.payment;
 
 import car.sharing.service.chs.model.PaymentStatus;
 import car.sharing.service.chs.model.PaymentType;

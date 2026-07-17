@@ -1,9 +1,9 @@
 package car.sharing.service.chs.controller;
 
-import car.sharing.service.chs.dto.AuthResponseDto;
-import car.sharing.service.chs.dto.UserLoginRequestDto;
-import car.sharing.service.chs.dto.UserRegisterRequestDto;
-import car.sharing.service.chs.dto.UserResponseDto;
+import car.sharing.service.chs.dto.user.AuthResponseDto;
+import car.sharing.service.chs.dto.user.UserLoginRequestDto;
+import car.sharing.service.chs.dto.user.UserRegisterRequestDto;
+import car.sharing.service.chs.dto.user.UserResponseDto;
 import car.sharing.service.chs.security.AuthenticationService;
 import car.sharing.service.chs.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

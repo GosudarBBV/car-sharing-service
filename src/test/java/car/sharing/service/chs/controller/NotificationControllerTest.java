@@ -2,8 +2,8 @@ package car.sharing.service.chs.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import car.sharing.service.chs.dto.TelegramMessageRequestDto;
-import car.sharing.service.chs.dto.TelegramMessageResponseDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageRequestDto;
+import car.sharing.service.chs.dto.notication.TelegramMessageResponseDto;
 import car.sharing.service.chs.util.BaseControllerTest;
 import car.sharing.service.chs.util.TestEntityFactory;
 import com.fasterxml.jackson.databind.JsonNode;
