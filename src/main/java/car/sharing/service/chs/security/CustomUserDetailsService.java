@@ -18,14 +18,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findWithRolesByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User not found with email: " + email
+                ));
 
         if (user.isDeleted()) {
-            throw new UserNotDeletedException("User account is deleted");
+            throw new UserNotDeletedException(
+                    "User account is deleted: " + email
+            );
         }
 
         var authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
+                .map(role -> new SimpleGrantedAuthority(
+                        "ROLE_" + role.getName().name()
+                ))
                 .toList();
 
         return new org.springframework.security.core.userdetails.User(

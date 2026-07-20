@@ -44,7 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (UsernameNotFoundException e) {
                 log.warn("User not found or deleted: {}", e.getMessage());
-                // Не встановлюємо аутентифікацію, просто продовжуємо
                 SecurityContextHolder.clearContext();
             } catch (Exception e) {
                 log.warn("Authentication failed: {}", e.getMessage());

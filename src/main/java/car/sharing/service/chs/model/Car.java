@@ -9,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,11 +46,9 @@ public class Car implements SoftDeletable {
     @Column(nullable = false)
     private CarType type;
 
-    @Min(0)
     @Column(nullable = false)
     private int inventory;
 
-    @DecimalMin("0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal dailyFee;
 

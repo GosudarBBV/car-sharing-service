@@ -10,18 +10,32 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
+    private static final String API_TITLE = "Car Sharing API";
+    private static final String API_VERSION = "1.0";
+
+    private static final String SECURITY_SCHEME_NAME = "bearerAuth";
+    private static final String SECURITY_SCHEME = "bearer";
+    private static final String BEARER_FORMAT = "JWT";
+
     @Bean
     public OpenAPI customOpenApi() {
         return new OpenAPI()
-                .info(new Info().title("Car Sharing API").version("1.0"))
+                .info(new Info()
+                        .title(API_TITLE)
+                        .version(API_VERSION)
+                )
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
+                        .addSecuritySchemes(
+                                SECURITY_SCHEME_NAME,
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
+                                        .scheme(SECURITY_SCHEME)
+                                        .bearerFormat(BEARER_FORMAT)
                         )
                 )
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+                .addSecurityItem(
+                        new SecurityRequirement()
+                                .addList(SECURITY_SCHEME_NAME)
+                );
     }
 }
