@@ -19,6 +19,13 @@ target/
 *.iml
 *.ipr
 
+# Environment variables
+.env
+
+# Test reports
+target/surefire-reports/
+target/failsafe-reports/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -31,3 +38,37 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionary.xml
+.idea/**/shelf/
+.idea/**/contentModel.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/misc.xml
+.idea/**/modules.xml
+.idea/**/runConfigurations/
+
+# Application secrets
+application-secrets.properties
+application-local.properties
+application-dev.properties
+.env
+*.key
+*.pem

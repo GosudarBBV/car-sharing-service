@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payments-table
+      author: you
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: rental_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amount
+                  type: DECIMAL(10,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: session_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: session_url
+                  type: VARCHAR(1000)
+        - addForeignKeyConstraint:
+            constraintName: fk_payments_rental
+            baseTableName: payments
+            baseColumnNames: rental_id
+            referencedTableName: rentals
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createIndex:
+            indexName: idx_payments_rental_id
+            tableName: payments
+            columns:
+              - column:
+                  name: rental_id
+        - createIndex:
+            indexName: idx_payments_status
+            tableName: payments
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            indexName: idx_payments_session_id
+            tableName: payments
+            columns:
+              - column:
+                  name: session_id
